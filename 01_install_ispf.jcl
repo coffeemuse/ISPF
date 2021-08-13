@@ -5,10 +5,10 @@
 //             MSGLEVEL=(1,1),
 //             USER=IBMUSER,PASSWORD=SYS1                         
 //*                                                                  
-//* Job card adapted to MVS/CE defaults 
-//*                                                                  
-//*                                                                  
-//* UNIT=SYSALLDA, VOL=PUB001 for MVS/CE                      
+//* Load ISPF datasets from tape
+//* UNIT=SYSALLDA, VOL=PUB001 for MVS/CE
+//* This is based on the JCL job provided by Wally
+//* buat tailored to MVS/CE                      
 //*                                                                  
 //LOAD     PROC HIL=ISP,DSN=LLIB,LABEL=1,                            
 //         UNIT=SYSALLDA,VOL=PUB001,CYL=2,MEM=20                         
@@ -71,7 +71,7 @@
 //OPTPLIB  EXEC LOAD,DSN=OPTPLIB,LABEL=13                              
 //OPTSLIB  EXEC LOAD,DSN=OPTSLIB,LABEL=14                              
 //*
-//* EDIT TSOLOGON PROC
+//* EDIT TSOLOGON PROC PER ISP.V2R2M0.DOC(INSTALL)
 //*
 //EDITTSOL EXEC PGM=IKJEFT01,REGION=1024K,DYNAMNBR=50
 //SYSPRINT DD  SYSOUT=*
@@ -99,8 +99,12 @@ END SAVE
 //          DISP=SHR
 //SYSIN DD DUMMY
 //*
-//* EDIT IKJACCNT PROC
+//* EDIT IKJACCNT PROC PER ISP.V2R2M0.DOC(INSTALL)
 //*
+//* OK, this is a nasty hack. I am just deleting
+//* the lines in the existing member and then 
+//* inserting new ones.  It is tailored to
+//* MVS/CE
 //EDITIKJA EXEC PGM=IKJEFT01,REGION=1024K,DYNAMNBR=50
 //SYSPRINT DD  SYSOUT=*
 //SYSTSPRT DD  SYSOUT=*
@@ -147,7 +151,7 @@ LIST
 END SAVE
 /*
 //*
-//* RUN ISPMAINT routine
+//* INSTALL MAINT PATCH PER ISP.V2R2M0.DOC(INSTALL)
 //*
 //IMASPZAP EXEC PGM=IMASPZAP,PARM=IGNIDRFULL  
 //SYSLIB   DD   DSN=ISP.V2R2M0.LLIB,DISP=SHR  
