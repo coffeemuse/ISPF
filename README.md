@@ -1,8 +1,8 @@
 # ISPF
-Package for mvs-sysgen (MVS/CE) to auto install Wally Mclaughlin's reimplementation/code of ISPF. 
+Package for [mvs-sysgen (MVS/CE)](https://github.com/MVS-sysgen/sysgen) to auto install Wally Mclaughlin's reimplementation/clone of ISPF. 
 
 ## Note
-You must obtain the tape file directly from Wally.  This repo only provides the supporting pieces to automated the installation.
+You must obtain the tape file directly from Wally.  This repo only provides the supporting pieces to automate the installation.  He has not given me permission to distribute his ISPF, therefore I leave it up to you to obtain the tape from Wally.
 
 ## VERY IMPORTANT NOTE
 This install updates the logon procedure and will fail if users are currently logged into your system when those steps are exectuted.
@@ -14,5 +14,5 @@ This install updates the logon procedure and will fail if users are currently lo
 4. Immediately `LOGOFF` and do not logon again until ISPF installs.
 5. Once install completes, login and type `ISPF` at the `READY` prompt to start ISPF.
 
-# THANKS
-Thanks go out to mainframed767 and Wally Mclaughlin.
+## Thank you
+Thanks go out to the [Soldier of Fortran](https://github.com/mainframed) and Wally Mclaughlin.
