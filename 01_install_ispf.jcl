@@ -5,10 +5,10 @@
 //             MSGLEVEL=(1,1),
 //             USER=IBMUSER,PASSWORD=SYS1                         
 //*                                                                  
-//* CHANGE THE JOB CARD 'name' AND 'acct' TO SUIT YOUR INSTALLATION. 
+//* Job card adapted to MVS/CE defaults 
 //*                                                                  
 //*                                                                  
-//* CHANGE THE 'vvvvvv' AND 'uuuu' AS REQUIRED.                      
+//* UNIT=SYSALLDA, VOL=PUB001 for MVS/CE                      
 //*                                                                  
 //LOAD     PROC HIL=ISP,DSN=LLIB,LABEL=1,                            
 //         UNIT=SYSALLDA,VOL=PUB001,CYL=2,MEM=20                         
@@ -23,7 +23,7 @@
 //         PEND                                                      
 //DELETE   EXEC PGM=IEHPROGM                                         
 //*                                                                  
-//* CHANGE THE 'vvvvvv' AND 'uuuu' AS REQUIRED.                      
+//* UNIT=SYSALLDA,VOL=SER=PUB001 for MVS/CE                      
 //*                                                                  
 //SYSPRINT DD   SYSOUT=*                                             
 //DASD     DD   UNIT=SYSALLDA,VOL=SER=PUB001,DISP=SHR                    
@@ -70,4 +70,94 @@
 //OPTMLIB  EXEC LOAD,DSN=OPTMLIB,LABEL=12                              
 //OPTPLIB  EXEC LOAD,DSN=OPTPLIB,LABEL=13                              
 //OPTSLIB  EXEC LOAD,DSN=OPTSLIB,LABEL=14                              
-//                                                             
+//*
+//* EDIT TSOLOGON PROC
+//*
+//EDITTSOL EXEC PGM=IKJEFT01,REGION=1024K,DYNAMNBR=50
+//SYSPRINT DD  SYSOUT=*
+//SYSTSPRT DD  SYSOUT=*
+//SYSTERM  DD  SYSOUT=*
+//SYSTSIN  DD  *
+EDIT 'SYS1.CMDPROC(TSOLOGON)' DATA NONUM OLD
+LIST
+TOP
+FIND \%STDLOGON
+UP
+INSERT ALLOC F(ISPPROF) DA('&SYSUID..ISP.PROF') SHR
+INSERT ALLOC F(REVPROF) DA('&SYSUID..ISP.PROF') SHR
+LIST
+END SAVE
+/*
+//*
+//* BACKUP IKJACCNT to IKJORIG
+//*
+//IKJCOPY EXEC PGM=IEBGENER 
+//SYSPRINT DD SYSOUT=*
+//SYSUT1 DD DSN=SYS1.PROCLIB(IKJACCNT),
+//          DISP=SHR
+//SYSUT2 DD DSN=SYS1.PROCLIB(IKJORIG),
+//          DISP=SHR
+//SYSIN DD DUMMY
+//*
+//* EDIT IKJACCNT PROC
+//*
+//EDITIKJA EXEC PGM=IKJEFT01,REGION=1024K,DYNAMNBR=50
+//SYSPRINT DD  SYSOUT=*
+//SYSTSPRT DD  SYSOUT=*
+//SYSTERM  DD  SYSOUT=*
+//SYSTSIN  DD  *
+EDIT 'SYS1.PROCLIB(IKJACCNT)' DATA OLD
+LIST
+TOP
+DELETE * 1000
+INSERT //IKJACCNT PROC 
+INSERT //IKJACCNT EXEC PGM=IKJEFT01,DYNAMNBR=64,
+INSERT //            PARM='EX ''SYS1.CMDPROC(TSOLOGON)''',TIME=1440
+INSERT //STEPLIB  DD  DSN=ISP.V2R2M0.LLIB,DISP=SHR
+INSERT //ISPCLIB  DD  DSN=ISP.V2R2M0.CLIB,DISP=SHR
+INSERT //ISPLLIB  DD  DSN=ISP.V2R2M0.LLIB,DISP=SHR
+INSERT //ISPMLIB  DD  DSN=ISP.V2R2M0.MLIB,DISP=SHR
+INSERT //ISPPLIB  DD  DSN=ISP.V2R2M0.PLIB,DISP=SHR
+INSERT //ISPSLIB  DD  DSN=ISP.V2R2M0.SLIB,DISP=SHR
+INSERT //ISPTLIB  DD  DSN=ISP.V2R2M0.TLIB,DISP=SHR
+INSERT //ISPTABL  DD  DSN=ISP.V2R2M0.TLIB,DISP=SHR
+INSERT //ISPTRACE DD  TERM=TS
+INSERT //SYSHELP  DD  DSN=SYS1.HELP,DISP=SHR
+INSERT //         DD  DSN=SYS2.HELP,DISP=SHR
+INSERT //SYSPROC  DD  DSN=SYS1.CMDPROC,DISP=SHR
+INSERT //SYSUADS  DD  DSN=SYS1.UADS,DISP=SHR
+INSERT //DD1      DD  DYNAM
+INSERT //DD2      DD  DYNAM
+INSERT //DD3      DD  DYNAM
+INSERT //DD4      DD  DYNAM
+INSERT //DD5      DD  DYNAM
+INSERT //DD6      DD  DYNAM
+INSERT //DD7      DD  DYNAM
+INSERT //DD8      DD  DYNAM
+INSERT //DD9      DD  DYNAM
+INSERT //DDA      DD  DYNAM
+INSERT //DDB      DD  DYNAM
+INSERT //DDC      DD  DYNAM 
+INSERT //DDD      DD  DYNAM
+INSERT //DDE      DD  DYNAM 
+INSERT //DDF      DD  DYNAM
+TOP
+RENUM 10 100 
+LIST
+END SAVE
+/*
+//*
+//* RUN ISPMAINT routine
+//*
+//IMASPZAP EXEC PGM=IMASPZAP,PARM=IGNIDRFULL  
+//SYSLIB   DD   DSN=ISP.V2R2M0.LLIB,DISP=SHR  
+//SYSPRINT DD   SYSOUT=*                      
+//SYSIN    DD   *                             
+*                                             
+*--------------------*                        
+* UPGRADE VERSION ID *                        
+*--------------------*                        
+*                                             
+ NAME ISPF     ISPVERSN                       
+ REP 05  F0F0F0                               
+//
