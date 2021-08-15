@@ -19,4 +19,4 @@ I strongly suggest that you make a backup of your MVS/CE install (at least the D
 5. Once install completes, login and type `ISPF` at the `READY` prompt to start ISPF.
 
 ## Thank you
-Thanks go out to the [Soldier of Fortran](https://github.com/mainframed) and Wally Mclaughlin.
+Thanks go out to Wally Mclaughlin for creating his ISPF clone and the [Soldier of Fortran](https://github.com/mainframed) for helping me through a hurdle with the installer script.
