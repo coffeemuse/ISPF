@@ -1,6 +1,9 @@
 # ISPF
 Package for [mvs-sysgen (MVS/CE)](https://github.com/MVS-sysgen/sysgen) to auto install Wally Mclaughlin's reimplementation/clone of ISPF. 
 
+## MVS/CE Version Compatability Warning
+Recent versions of MVS/CE sysgent have changed the packaging system and this repository has not yet been updated to accomodate the required changes. In the current state, this package may only be used with the "original" branch of [mvs-sysgen (MVS/CE)](https://github.com/MVS-sysgen/sysgen).
+
 ## Note
 You must obtain the tape file directly from Wally.  This repo only provides the supporting pieces to automate the installation. Wally  has not given me permission to distribute his ISPF, therefore I leave it up to you to obtain the tape from Wally. 
 
